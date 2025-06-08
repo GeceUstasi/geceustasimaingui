@@ -1,4 +1,4 @@
--- Rayfield Tarzı GUI Framework
+
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -8,11 +8,11 @@ local HttpService = game:GetService("HttpService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Framework tablosu
+
 local Framework = {}
 Framework.__index = Framework
 
--- Tema renkleri
+
 local Theme = {
     Background = Color3.fromRGB(15, 15, 15),
     SecondaryBackground = Color3.fromRGB(20, 20, 20),
@@ -27,7 +27,7 @@ local Theme = {
     Error = Color3.fromRGB(255, 50, 50)
 }
 
--- Ana GUI oluşturma fonksiyonu
+
 function Framework:CreateWindow(config)
     config = config or {}
     local WindowName = config.Name or "Framework GUI"
@@ -39,15 +39,14 @@ function Framework:CreateWindow(config)
         Elements = {},
         Config = ConfigurationSaving
     }
-    
-    -- ScreenGui oluştur
+
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "FrameworkGUI"
     screenGui.Parent = playerGui
     screenGui.ResetOnSpawn = false
     screenGui.DisplayOrder = 100
     
-    -- Ana container
+
     local mainContainer = Instance.new("Frame")
     mainContainer.Name = "MainContainer"
     mainContainer.Size = UDim2.new(0, 900, 0, 550)
@@ -56,12 +55,11 @@ function Framework:CreateWindow(config)
     mainContainer.BorderSizePixel = 0
     mainContainer.Parent = screenGui
     
-    -- Ana container corner
+
     local mainCorner = Instance.new("UICorner")
     mainCorner.CornerRadius = UDim.new(0, 12)
     mainCorner.Parent = mainContainer
     
-    -- Gölge efekti
     local shadowFrame = Instance.new("Frame")
     shadowFrame.Name = "Shadow"
     shadowFrame.Size = UDim2.new(1, 30, 1, 30)
@@ -75,7 +73,6 @@ function Framework:CreateWindow(config)
     shadowCorner.CornerRadius = UDim.new(0, 12)
     shadowCorner.Parent = shadowFrame
     
-    -- Başlık bar
     local titleBar = Instance.new("Frame")
     titleBar.Name = "TitleBar"
     titleBar.Size = UDim2.new(1, 0, 0, 50)
@@ -87,7 +84,6 @@ function Framework:CreateWindow(config)
     titleCorner.CornerRadius = UDim.new(0, 12)
     titleCorner.Parent = titleBar
     
-    -- Başlık alt düzeltme
     local titleFix = Instance.new("Frame")
     titleFix.Size = UDim2.new(1, 0, 0, 12)
     titleFix.Position = UDim2.new(0, 0, 1, -12)
@@ -95,7 +91,6 @@ function Framework:CreateWindow(config)
     titleFix.BorderSizePixel = 0
     titleFix.Parent = titleBar
     
-    -- Başlık metni
     local titleLabel = Instance.new("TextLabel")
     titleLabel.Size = UDim2.new(1, -100, 1, 0)
     titleLabel.Position = UDim2.new(0, 20, 0, 0)
@@ -107,7 +102,6 @@ function Framework:CreateWindow(config)
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.Parent = titleBar
     
-    -- Minimize butonu
     local minimizeBtn = Instance.new("TextButton")
     minimizeBtn.Size = UDim2.new(0, 30, 0, 30)
     minimizeBtn.Position = UDim2.new(1, -70, 0, 10)
@@ -123,7 +117,6 @@ function Framework:CreateWindow(config)
     minCorner.CornerRadius = UDim.new(0, 6)
     minCorner.Parent = minimizeBtn
     
-    -- Kapat butonu
     local closeBtn = Instance.new("TextButton")
     closeBtn.Size = UDim2.new(0, 30, 0, 30)
     closeBtn.Position = UDim2.new(1, -35, 0, 10)
@@ -139,7 +132,6 @@ function Framework:CreateWindow(config)
     closeCorner.CornerRadius = UDim.new(0, 6)
     closeCorner.Parent = closeBtn
     
-    -- Tab container
     local tabContainer = Instance.new("Frame")
     tabContainer.Name = "TabContainer"
     tabContainer.Size = UDim2.new(0, 220, 1, -60)
@@ -152,7 +144,6 @@ function Framework:CreateWindow(config)
     tabCorner.CornerRadius = UDim.new(0, 8)
     tabCorner.Parent = tabContainer
     
-    -- Tab scroll
     local tabScroll = Instance.new("ScrollingFrame")
     tabScroll.Size = UDim2.new(1, -10, 1, -10)
     tabScroll.Position = UDim2.new(0, 5, 0, 5)
@@ -167,7 +158,6 @@ function Framework:CreateWindow(config)
     tabLayout.Padding = UDim.new(0, 5)
     tabLayout.Parent = tabScroll
     
-    -- Content container
     local contentContainer = Instance.new("Frame")
     contentContainer.Name = "ContentContainer"
     contentContainer.Size = UDim2.new(0, 650, 1, -60)
@@ -180,7 +170,6 @@ function Framework:CreateWindow(config)
     contentCorner.CornerRadius = UDim.new(0, 8)
     contentCorner.Parent = contentContainer
     
-    -- Content scroll
     local contentScroll = Instance.new("ScrollingFrame")
     contentScroll.Size = UDim2.new(1, -20, 1, -20)
     contentScroll.Position = UDim2.new(0, 10, 0, 10)
@@ -195,7 +184,6 @@ function Framework:CreateWindow(config)
     contentLayout.Padding = UDim.new(0, 10)
     contentLayout.Parent = contentScroll
     
-    -- Sürükleme sistemi
     local dragging = false
     local dragStart = nil
     local startPos = nil
@@ -221,7 +209,6 @@ function Framework:CreateWindow(config)
         end
     end)
     
-    -- Buton hover efektleri
     local function addHoverEffect(button, normalColor, hoverColor)
         button.MouseEnter:Connect(function()
             TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = hoverColor}):Play()
@@ -235,7 +222,6 @@ function Framework:CreateWindow(config)
     addHoverEffect(minimizeBtn, Theme.TertiaryBackground, Theme.Accent)
     addHoverEffect(closeBtn, Theme.Error, Color3.fromRGB(255, 70, 70))
     
-    -- Kapat/Minimize fonksiyonları
     local minimized = false
     
     minimizeBtn.MouseButton1Click:Connect(function()
@@ -264,7 +250,6 @@ function Framework:CreateWindow(config)
         screenGui:Destroy()
     end)
     
-    -- Tab sistemi
     local selectedTab = nil
     local currentContent = nil
     
@@ -279,7 +264,6 @@ function Framework:CreateWindow(config)
             Elements = {}
         }
         
-        -- Tab butonu oluştur
         local tabButton = Instance.new("TextButton")
         tabButton.Name = TabName .. "Tab"
         tabButton.Size = UDim2.new(1, 0, 0, 45)
@@ -296,7 +280,6 @@ function Framework:CreateWindow(config)
         tabButtonCorner.CornerRadius = UDim.new(0, 8)
         tabButtonCorner.Parent = tabButton
         
-        -- Tab içeriği frame
         local tabContent = Instance.new("Frame")
         tabContent.Name = TabName .. "Content"
         tabContent.Size = UDim2.new(1, 0, 0, 0)
@@ -309,7 +292,6 @@ function Framework:CreateWindow(config)
         tabContentLayout.Padding = UDim.new(0, 8)
         tabContentLayout.Parent = tabContent
         
-        -- Tab seçim sistemi
         local function selectTab()
             if selectedTab then
                 TweenService:Create(selectedTab, TweenInfo.new(0.2), {
@@ -334,7 +316,6 @@ function Framework:CreateWindow(config)
         
         tabButton.MouseButton1Click:Connect(selectTab)
         
-        -- Hover efekti
         tabButton.MouseEnter:Connect(function()
             if selectedTab ~= tabButton then
                 TweenService:Create(tabButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}):Play()
@@ -347,7 +328,6 @@ function Framework:CreateWindow(config)
             end
         end)
         
-        -- Element oluşturma fonksiyonları
         function tab:CreateSection(config)
             config = config or {}
             local SectionName = config.Name or "Section"
@@ -402,7 +382,6 @@ function Framework:CreateWindow(config)
             button.Font = Enum.Font.Gotham
             button.Parent = buttonFrame
             
-            -- Hover efekti
             button.MouseEnter:Connect(function()
                 TweenService:Create(buttonFrame, TweenInfo.new(0.2), {BackgroundColor3 = Theme.Accent}):Play()
             end)
@@ -1079,7 +1058,6 @@ function Framework:CreateWindow(config)
         return tab
     end
     
-    -- Canvas boyutlarını güncelle
     local function updateCanvasSize()
         tabScroll.CanvasSize = UDim2.new(0, 0, 0, tabLayout.AbsoluteContentSize.Y + 10)
         if currentContent then
@@ -1134,7 +1112,6 @@ function Framework:CreateWindow(config)
         notificationContent.TextWrapped = true
         notificationContent.Parent = notificationFrame
         
-        -- Animasyon
         notificationFrame:TweenPosition(
             UDim2.new(1, -320, 0, 20),
             "Out",
@@ -1143,7 +1120,6 @@ function Framework:CreateWindow(config)
             true
         )
         
-        -- Otomatik kapanma
         wait(Duration)
         notificationFrame:TweenPosition(
             UDim2.new(1, 0, 0, 20),
@@ -1160,5 +1136,4 @@ function Framework:CreateWindow(config)
     return window
 end
 
--- Framework'ü döndür
 return Framework
